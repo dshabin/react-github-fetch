@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-
+import logo from './logo.svg';
 // styling
 const img_styling = {
   borderTopLeftRadius: '50% 50%',
@@ -15,7 +15,12 @@ const div_styling = {
   flex : 1,
   flexDirection: 'column',
   justifyContent: 'center',
-  backgroundColor : 'aliceblue'
+  backgroundColor : 'aliceblue',
+  boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+  marginTop : '20px',
+  marginLeft : '20px',
+  marginRight : '20px',
+  marginButton : '20px',
 }
 
 const error_div_styling = {
@@ -24,7 +29,12 @@ const error_div_styling = {
   flex : 1,
   flexDirection: 'column',
   justifyContent: 'center',
-  backgroundColor : 'red'
+  backgroundColor : 'red',
+  boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+  marginTop : '20px',
+  marginLeft : '20px',
+  marginRight : '20px',
+  marginButton : '20px',
 }
 
 
@@ -46,10 +56,12 @@ const label_styling = {
     color : 'grey'
 }
 
+const img_place_holder = logo
+
 class App extends Component {
 
   //whithout initializing ; the first render will be failed
-  state = {followers :0 ,avatar_url : '',public_repos : 0 , name : '-',text : '', status:200};
+  state = {followers :0 ,avatar_url : img_place_holder ,public_repos : 0 , name : '-',text : '', status:200};
 
   changeHandler = (evn) => {
     this.setState({
@@ -71,29 +83,24 @@ class App extends Component {
     try {
       req = await fetch('http://api.github.com/users/'+ username_to_fetch);
       console.log(req)
+      const status = await req.status
+      if (status === 200){
+        const {followers,avatar_url,public_repos,name} = await req.json();
+        this.setState({followers,avatar_url,public_repos,name,status})
+      }else{
+        const {followers,public_repos,name} = await req.json();
+        this.setState({followers,public_repos,name,status,avatar_url : img_place_holder})
+      }
     }catch (e){
       console.log(e.message);
+      this.setState({status : 400})
     }
-    const status = await req.status
-    const {followers,avatar_url,public_repos,name} = await req.json();
-    this.setState({followers,avatar_url,public_repos,name,status})
   }
 
   render() {
     return (
+
       <div className="App" style={this.div_styling_Handler()}>
-        <div>
-        <input
-          placeholder="Enter a username to fetch.."
-          type="text"
-          onChange={this.changeHandler}
-        />
-        <input
-          type="button"
-          value="fetch"
-          onClick= {this.doFetch.bind(this)}
-        />
-        </div>
 
         <div>
           <img alt = "" style = {img_styling} src={this.state.avatar_url} />
@@ -114,6 +121,18 @@ class App extends Component {
                <label style = {label_styling}>#Followers</label>
                <p>{this.state.followers}</p>
              </div>
+        </div>
+        <div>
+        <input
+          placeholder="Enter a username to fetch.."
+          type="text"
+          onChange={this.changeHandler}
+        />
+        <input
+          type="button"
+          value="fetch"
+          onClick= {this.doFetch.bind(this)}
+        />
         </div>
 
       </div>
