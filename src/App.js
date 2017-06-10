@@ -7,6 +7,7 @@ const img_styling = {
   borderTopRightRadius: '50% 50%',
   borderBottomRightRadius: '50% 50%',
   borderBottomLeftRadius: '50% 50%',
+  maxWidth : '100%'
 }
 
 const div_styling = {
@@ -34,7 +35,7 @@ const error_div_styling = {
   marginTop : '20px',
   marginLeft : '20px',
   marginRight : '20px',
-  marginButton : '20px',
+  marginBottom : '20px',
 }
 
 
@@ -77,6 +78,8 @@ class App extends Component {
     }
   }
 
+
+
   async doFetch() {
     const username_to_fetch = this.state.text
     let req;
@@ -98,14 +101,14 @@ class App extends Component {
   }
 
   render() {
+
+
+
     return (
-
       <div className="App" style={this.div_styling_Handler()}>
-
         <div>
-          <img alt = "" style = {img_styling} src={this.state.avatar_url} />
+        <img alt = "" style = {img_styling} src={this.state.avatar_url} />
         </div>
-
         <div style={labels_div_styling}>
              <div style={inner_div_styling}>
                <label style = {label_styling}>#Name</label>
@@ -134,7 +137,6 @@ class App extends Component {
           onClick= {this.doFetch.bind(this)}
         />
         </div>
-
       </div>
     );
   }
