@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import logo from './logo.svg';
+import error from './error.svg';
 // styling
 const img_styling = {
   borderTopLeftRadius: '50% 50%',
@@ -92,11 +93,11 @@ class App extends Component {
         this.setState({followers,avatar_url,public_repos,name,status})
       }else{
         const {followers,public_repos,name} = await req.json();
-        this.setState({followers,public_repos,name,status,avatar_url : img_place_holder})
+        this.setState({followers,public_repos,name,status,avatar_url : error })
       }
     }catch (e){
       console.log(e.message);
-      this.setState({status : 400})
+      this.setState({status : 400,avatar_url : error })
     }
   }
 
@@ -105,6 +106,7 @@ class App extends Component {
 
 
     return (
+
       <div className="App" style={this.div_styling_Handler()}>
         <div>
         <img alt = "" style = {img_styling} src={this.state.avatar_url} />
