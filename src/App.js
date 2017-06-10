@@ -85,7 +85,7 @@ class App extends Component {
     const username_to_fetch = this.state.text
     let req;
     try {
-      req = await fetch('http://api.github.com/users/'+ username_to_fetch);
+      req = await fetch('https://api.github.com/users/'+ username_to_fetch);
       console.log(req)
       const status = await req.status
       if (status === 200){
