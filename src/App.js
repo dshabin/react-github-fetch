@@ -15,11 +15,18 @@ const div_styling = {
   flex : 1,
   flexDirection: 'column',
   justifyContent: 'center',
+  backgroundColor : 'aliceblue'
 }
 
-const hidden_styling = {
-  display : 'none'
+const error_div_styling = {
+  textAlign : 'center',
+  display : 'flex',
+  flex : 1,
+  flexDirection: 'column',
+  justifyContent: 'center',
+  backgroundColor : 'red'
 }
+
 
 const inner_div_styling ={
   padding : '50px'
@@ -39,12 +46,10 @@ const label_styling = {
     color : 'grey'
 }
 
-
-
 class App extends Component {
 
   //whithout initializing ; the first render will be failed
-  state = {followers :0 ,avatar_url : '',public_repos : 0 , name : '-',text : ''};
+  state = {followers :0 ,avatar_url : '',public_repos : 0 , name : '-',text : '', status:200};
 
   changeHandler = (evn) => {
     this.setState({
@@ -52,25 +57,31 @@ class App extends Component {
     });
   }
 
+  div_styling_Handler = () => {
+    if (this.state.status === 200) {
+      return div_styling
+    }else{
+      return error_div_styling
+    }
+  }
+
   async doFetch() {
     const username_to_fetch = this.state.text
     let req;
-
     try {
       req = await fetch('http://api.github.com/users/'+ username_to_fetch);
+      console.log(req)
     }catch (e){
       console.log(e.message);
     }
-
+    const status = await req.status
     const {followers,avatar_url,public_repos,name} = await req.json();
-    this.setState({followers,avatar_url,public_repos,name})
+    this.setState({followers,avatar_url,public_repos,name,status})
   }
-
-
 
   render() {
     return (
-      <div className="App" style={div_styling}>
+      <div className="App" style={this.div_styling_Handler()}>
         <div>
         <input
           placeholder="Enter a username to fetch.."
@@ -107,8 +118,6 @@ class App extends Component {
 
       </div>
     );
-
-
   }
 }
 
